@@ -80,16 +80,20 @@ jobs:
         chmod +x RASPA2/install/bin/simulate
         echo "::add-path::${{ github.workspace }}/RASPA2/install/bin"
         export RASPA2_DIR=${{ github.workspace }}/RASPA2/install
-    - name: Run pytest
+    - name: test computer and code
       run: |
-        pytest --cov-report=xml --cov=./aiida_raspa
-    - name: Build Docs
-      run: |
-        cd docs
-        make
-    - name: Upload coverage to codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-        file: ./coverage.xml
+        verdi computer list
+        verdi code list
+    # - name: Run pytest
+    #   run: |
+    #     pytest --cov-report=xml --cov=./aiida_raspa
+    # - name: Build Docs
+    #   run: |
+    #     cd docs
+    #     make
+    # - name: Upload coverage to codecov
+    #   uses: codecov/codecov-action@v1
+    #   with:
+    #     token: ${{secrets.CODECOV_TOKEN}}
+    #     file: ./coverage.xml
     
