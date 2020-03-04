@@ -37,6 +37,7 @@ jobs:
         python-version: [3.6,3.8]
         backend: ['django']
     steps:
+    - uses: actions/checkout@v1
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
@@ -53,8 +54,6 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install --upgrade pip
-        pwd
-        ls
         pip install -e .[test,pre-commit,docs]
         pip install wrapt==1.11.2
         reentry scan -r aiida
