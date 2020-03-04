@@ -57,10 +57,10 @@ jobs:
         pip install -e .[test,pre-commit,docs]
         pip install wrapt==1.11.2
         reentry scan -r aiida
-    - name: Run pre-commit
-      run: |
-        pre-commit install
-        pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
+    # - name: Run pre-commit
+    #   run: |
+    #     pre-commit install
+    #     pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
     - name: Get compiled RASPA code from cache
       id: raspa-cache
       uses: actions/cache@v1
