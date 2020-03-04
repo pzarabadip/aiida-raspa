@@ -53,6 +53,8 @@ jobs:
     - name: Install python dependencies
       run: |
         pip install --upgrade pip
+        pwd
+        ls
         pip install -e .[test,pre-commit,docs]
         pip install wrapt==1.11.2
         reentry scan -r aiida
