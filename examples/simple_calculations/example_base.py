@@ -74,6 +74,7 @@ def example_base(raspa_code, submit=True):
     if submit:
         print("Testing RASPA with simple input ...")
         res, pk = run_get_pk(builder)
+        print(res.keys())
         print("calculation pk: ", pk)
         print("Average number of methane molecules/uc:",
               res['output_parameters'].dict.tcc1rs['components']['methane']['loading_absolute_average'])
