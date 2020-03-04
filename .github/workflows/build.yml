@@ -87,10 +87,10 @@ jobs:
     - name: Run pytest
       run: |
         pytest --cov-report=xml --cov=./aiida_raspa
-    - name: Build Docs
-      run: |
-        cd docs
-        make
+    # - name: Build Docs
+    #   run: |
+    #     cd docs
+    #     make
     - name: Upload coverage to codecov
       uses: codecov/codecov-action@v1
       with:
