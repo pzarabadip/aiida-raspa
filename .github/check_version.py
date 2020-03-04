@@ -22,10 +22,8 @@ VERSION = aiida_raspa.__version__
 
 if VERSION != SETUP_CONTENT['version']:
     print('version number mismatch detected:')
-    print("version number in '{}': {}".format(SETUP_FNAME,
-                                              SETUP_CONTENT['version']))
-    print("version number in '{}/__init__.py': {}".format(
-        'aiida_raspa', VERSION))
+    print("version number in '{}': {}".format(SETUP_FNAME, SETUP_CONTENT['version']))
+    print("version number in '{}/__init__.py': {}".format('aiida_raspa', VERSION))
     sys.exit(1)
 
 # Overwrite version in setup.json
