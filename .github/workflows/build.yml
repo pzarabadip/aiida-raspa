@@ -79,6 +79,7 @@ jobs:
       run: |
         chmod +x RASPA2/install/bin/simulate
         echo "::add-path::${{ github.workspace }}/RASPA2/install/bin"
+        export RASPA2_DIR=${{ github.workspace }}/RASPA2/install
     - name: Run pytest
       run: |
         pytest --cov-report=xml --cov=./aiida_raspa
