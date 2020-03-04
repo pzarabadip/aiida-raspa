@@ -63,10 +63,11 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -e .[test,pre-commit,docs]
+        cd ../..
         git clone https://github.com/pzarabadip/aiida-core.git -b pytest_code_factory aiida-core
         cd aiida-core
         pip install -e .
-        cd ..
+        cd ../aiida-raspa/aiida-raspa
         pip install wrapt==1.11.2
         reentry scan -r aiida
     # - name: Run pre-commit
