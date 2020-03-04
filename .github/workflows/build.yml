@@ -63,6 +63,10 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -e .[test,pre-commit,docs]
+        git clone git@github.com:pzarabadip/aiida-core.git -b pytest_code_factory aiida-core
+        cd aiida-core
+        pip install -e .
+        cd ..
         pip install wrapt==1.11.2
         reentry scan -r aiida
     # - name: Run pre-commit
@@ -79,21 +83,16 @@ jobs:
       run: |
         chmod +x RASPA2/install/bin/simulate
         echo "::add-path::${{ github.workspace }}/RASPA2/install/bin"
-        export RASPA2_DIR=${{ github.workspace }}/RASPA2/install
-    - name: test computer and code
+    - name: Run pytest
       run: |
-        verdi computer list
-        verdi code list
-    # - name: Run pytest
-    #   run: |
-    #     pytest --cov-report=xml --cov=./aiida_raspa
-    # - name: Build Docs
-    #   run: |
-    #     cd docs
-    #     make
-    # - name: Upload coverage to codecov
-    #   uses: codecov/codecov-action@v1
-    #   with:
-    #     token: ${{secrets.CODECOV_TOKEN}}
-    #     file: ./coverage.xml
+        pytest --cov-report=xml --cov=./aiida_raspa
+    - name: Build Docs
+      run: |
+        cd docs
+        make
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.xml
     

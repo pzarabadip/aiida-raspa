@@ -7,4 +7,5 @@ pytest_plugins = ['aiida.manage.tests.pytest_fixtures']  # pylint: disable=inval
 
 @pytest.fixture(scope='function')
 def raspa_code(aiida_local_code_factory):  # pylint: disable=unused-argument
-    return aiida_local_code_factory("raspa", "simulate")
+    return aiida_local_code_factory(
+        "raspa", "simulate", prepend='export RASPA2_DIR=/home/runner/work/aiida-raspa/aiida-raspa/RASPA2/install')
