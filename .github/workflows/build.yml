@@ -63,7 +63,7 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -e .[test,pre-commit,docs]
-        git clone git@github.com:pzarabadip/aiida-core.git -b pytest_code_factory aiida-core
+        git clone https://github.com/pzarabadip/aiida-core.git -b pytest_code_factory aiida-core
         cd aiida-core
         pip install -e .
         cd ..
