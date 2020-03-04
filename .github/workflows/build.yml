@@ -1,0 +1,70 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6,3.8]
+        backend: ['django']
+    steps:
+    - uses: actions/checkout@v1
+    - name: Get simulate binary from cache (or start caching)
+      id: raspa-cache
+      uses: actions/cache@v1
+      with:
+        path: ./RASPA2/install
+        key: raspa
+    - name: Compile RASPA
+      if: steps.raspa-cache.outputs.cache-hit != 'true'
+      run: |
+        export RASPA2_DIR=${{ github.workspace }}/RASPA2/install
+        git clone https://github.com/iRASPA/RASPA2.git RASPA2
+        cd RASPA2
+        rm -rf autom4te.cache
+        mkdir m4
+        aclocal
+        autoreconf -i
+        automake --add-missing
+        autoconf
+        ./configure --prefix=${RASPA2_DIR}
+        make
+        make install
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install system dependencies
+      run: |
+        wget -O - "https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc" | sudo apt-key add -
+        echo 'deb https://dl.bintray.com/rabbitmq-erlang/debian bionic erlang' | sudo tee -a /etc/apt/sources.list.d/bintray.rabbitmq.list
+        echo 'deb https://dl.bintray.com/rabbitmq/debian bionic main' | sudo tee -a /etc/apt/sources.list.d/bintray.rabbitmq.list
+        sudo rm -f /etc/apt/sources.list.d/dotnetdev.list /etc/apt/sources.list.d/microsoft-prod.list
+        sudo apt update
+        sudo apt install postgresql postgresql-server-dev-all postgresql-client rabbitmq-server graphviz
+        sudo systemctl status rabbitmq-server.service 
+    - name: Install python dependencies
+      run: |
+        pip install --upgrade pip
+        pip install -e .[testing,pre-commit]
+        pip install wrapt==1.11.2
+        reentry scan -r aiida
+    - name: Run pre-commit
+      run: |
+        pre-commit install
+        pre-commit run --all-files || ( git status --short ; git diff ; exit 1 )
+    - name: Append to the path
+      run: |
+        chmod +x RASPA2/install/bin/simulate
+        echo "::add-path::${{ github.workspace }}/RASPA2/install/bin"
+    - name: Run pytest
+      run: |
+        pytest --cov-report=xml --cov=./aiida_raspa
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.xml
+    

@@ -1,8 +1,0 @@
-label: raspa
-computer: localhost
-description:
-input_plugin: raspa
-on_computer: True
-remote_abs_path: /opt/RASPA2_installed/bin/simulate
-append_text:
-prepend_text: export RASPA2_DIR=/opt/RASPA2_installed/
