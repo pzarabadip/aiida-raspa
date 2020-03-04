@@ -70,7 +70,7 @@ def example_base(raspa_code, submit=True):
     }
     builder.metadata.dry_run = False
     builder.metadata.store_provenance = True
-
+    print(builder)
     if submit:
         print("Testing RASPA with simple input ...")
         res, pk = run_get_pk(builder)

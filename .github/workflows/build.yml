@@ -38,6 +38,14 @@ jobs:
         backend: ['django']
     steps:
     - uses: actions/checkout@v1
+    - name: Cache python dependencies
+      id: cache-pip
+      uses: actions/cache@v1
+      with:
+        path: ~/.cache/pip
+        key: pip-${{ matrix.python-version }}-tests-${{ hashFiles('**/setup.json') }}
+        restore-keys: |
+          pip-${{ matrix.python-version }}-tests
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
